@@ -27,6 +27,25 @@ function latLngToVec3(lat, lng, r = 1) {
 function lngToRotY(lng) { return -(90 + lng) * DEG2RAD }
 function latToRotX(lat) { return lat * DEG2RAD }
 
+// ─── Densify a ring: add intermediate points along long edges ───
+function densifyRing(ring, maxDeg) {
+  const out = [ring[0]]
+  for (let i = 1; i < ring.length; i++) {
+    const [lng0, lat0] = ring[i - 1]
+    const [lng1, lat1] = ring[i]
+    const d = Math.max(Math.abs(lng1 - lng0), Math.abs(lat1 - lat0))
+    if (d > maxDeg) {
+      const n = Math.ceil(d / maxDeg)
+      for (let j = 1; j < n; j++) {
+        const t = j / n
+        out.push([lng0 + t * (lng1 - lng0), lat0 + t * (lat1 - lat0)])
+      }
+    }
+    out.push(ring[i])
+  }
+  return out
+}
+
 // ─── Subdivide a triangle so edges stay ≤ maxDeg on the sphere ───
 function subdivideTri(lng0, lat0, lng1, lat1, lng2, lat2, r, maxDeg, out) {
   const d01 = Math.max(Math.abs(lng1 - lng0), Math.abs(lat1 - lat0))
@@ -40,7 +59,6 @@ function subdivideTri(lng0, lat0, lng1, lat1, lng2, lat2, r, maxDeg, out) {
     out.push(v0.x, v0.y, v0.z, v1.x, v1.y, v1.z, v2.x, v2.y, v2.z)
     return
   }
-  // Split the longest edge at its midpoint
   if (d01 >= d02 && d01 >= d12) {
     const mLng = (lng0 + lng1) / 2, mLat = (lat0 + lat1) / 2
     subdivideTri(lng0, lat0, mLng, mLat, lng2, lat2, r, maxDeg, out)
@@ -58,15 +76,20 @@ function subdivideTri(lng0, lat0, lng1, lat1, lng2, lat2, r, maxDeg, out) {
 
 // ─── Triangulate a GeoJSON polygon ring onto a sphere ───
 function triangulateRing(outerRing, holes, r) {
+  // Densify rings so earcut creates small triangles (no long internal diagonals)
+  const DENSE = 5
+  const denseOuter = densifyRing(outerRing, DENSE)
+  const denseHoles = holes.map(h => densifyRing(h, DENSE))
+
   const coords = []
   const holeIndices = []
-  const outer = outerRing[outerRing.length - 1][0] === outerRing[0][0] &&
-                outerRing[outerRing.length - 1][1] === outerRing[0][1]
-    ? outerRing.slice(0, -1) : outerRing
+  const outer = denseOuter[denseOuter.length - 1][0] === denseOuter[0][0] &&
+                denseOuter[denseOuter.length - 1][1] === denseOuter[0][1]
+    ? denseOuter.slice(0, -1) : denseOuter
   for (const [lng, lat] of outer) {
     coords.push(lng, lat)
   }
-  for (const hole of holes) {
+  for (const hole of denseHoles) {
     holeIndices.push(coords.length / 2)
     const h = hole[hole.length - 1][0] === hole[0][0] &&
               hole[hole.length - 1][1] === hole[0][1]
@@ -83,7 +106,7 @@ function triangulateRing(outerRing, holes, r) {
       coords[i0 * 2], coords[i0 * 2 + 1],
       coords[i1 * 2], coords[i1 * 2 + 1],
       coords[i2 * 2], coords[i2 * 2 + 1],
-      r, 10, verts // max 10° per edge — hugs the sphere
+      r, 8, verts
     )
   }
   return verts
