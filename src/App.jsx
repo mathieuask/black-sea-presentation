@@ -38,6 +38,7 @@ export default function App() {
         isAnimating={isAnimating}
         setIsAnimating={setIsAnimating}
         isDark={isDark}
+        globeRef={globeRef}
       />
     </>
   )

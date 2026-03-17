@@ -1,16 +1,14 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, useMemo, useState, useCallback } from 'react'
 import * as THREE from 'three'
 import { feature } from 'topojson-client'
-import worldTopo from 'world-atlas/countries-110m.json'
+import worldTopo from 'world-atlas/countries-50m.json'
+import earcut from 'earcut'
+import { ALL_IDS } from '../countryRegistry'
 
-// ─── Country colors ───
-const COUNTRY_COLORS = {
-  '804': [0.91, 0.44, 0.35],  // Ukraine
-  '643': [0.91, 0.44, 0.35],  // Russia
-  '792': [0.90, 0.65, 0.29],  // Turkey
-  '268': [0.36, 0.68, 0.49],  // Georgia
-  '100': [0.36, 0.68, 0.49],  // Bulgaria
-  '642': [0.36, 0.61, 0.84],  // Romania
+// ─── Hex color to RGB array ───
+function hexToRgb(hex) {
+  const n = parseInt(hex.slice(1), 16)
+  return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]
 }
 
 const DEG2RAD = Math.PI / 180
@@ -29,10 +27,73 @@ function latLngToVec3(lat, lng, r = 1) {
 function lngToRotY(lng) { return -(90 + lng) * DEG2RAD }
 function latToRotX(lat) { return lat * DEG2RAD }
 
+// ─── Subdivide a triangle so edges stay ≤ maxDeg on the sphere ───
+function subdivideTri(lng0, lat0, lng1, lat1, lng2, lat2, r, maxDeg, out) {
+  const d01 = Math.max(Math.abs(lng1 - lng0), Math.abs(lat1 - lat0))
+  const d02 = Math.max(Math.abs(lng2 - lng0), Math.abs(lat2 - lat0))
+  const d12 = Math.max(Math.abs(lng2 - lng1), Math.abs(lat2 - lat1))
+  const mx = Math.max(d01, d02, d12)
+  if (mx <= maxDeg) {
+    const v0 = latLngToVec3(lat0, lng0, r)
+    const v1 = latLngToVec3(lat1, lng1, r)
+    const v2 = latLngToVec3(lat2, lng2, r)
+    out.push(v0.x, v0.y, v0.z, v1.x, v1.y, v1.z, v2.x, v2.y, v2.z)
+    return
+  }
+  // Split the longest edge at its midpoint
+  if (d01 >= d02 && d01 >= d12) {
+    const mLng = (lng0 + lng1) / 2, mLat = (lat0 + lat1) / 2
+    subdivideTri(lng0, lat0, mLng, mLat, lng2, lat2, r, maxDeg, out)
+    subdivideTri(mLng, mLat, lng1, lat1, lng2, lat2, r, maxDeg, out)
+  } else if (d02 >= d12) {
+    const mLng = (lng0 + lng2) / 2, mLat = (lat0 + lat2) / 2
+    subdivideTri(lng0, lat0, lng1, lat1, mLng, mLat, r, maxDeg, out)
+    subdivideTri(mLng, mLat, lng1, lat1, lng2, lat2, r, maxDeg, out)
+  } else {
+    const mLng = (lng1 + lng2) / 2, mLat = (lat1 + lat2) / 2
+    subdivideTri(lng0, lat0, lng1, lat1, mLng, mLat, r, maxDeg, out)
+    subdivideTri(lng0, lat0, mLng, mLat, lng2, lat2, r, maxDeg, out)
+  }
+}
+
+// ─── Triangulate a GeoJSON polygon ring onto a sphere ───
+function triangulateRing(outerRing, holes, r) {
+  const coords = []
+  const holeIndices = []
+  const outer = outerRing[outerRing.length - 1][0] === outerRing[0][0] &&
+                outerRing[outerRing.length - 1][1] === outerRing[0][1]
+    ? outerRing.slice(0, -1) : outerRing
+  for (const [lng, lat] of outer) {
+    coords.push(lng, lat)
+  }
+  for (const hole of holes) {
+    holeIndices.push(coords.length / 2)
+    const h = hole[hole.length - 1][0] === hole[0][0] &&
+              hole[hole.length - 1][1] === hole[0][1]
+      ? hole.slice(0, -1) : hole
+    for (const [lng, lat] of h) {
+      coords.push(lng, lat)
+    }
+  }
+  const indices = earcut(coords, holeIndices.length > 0 ? holeIndices : undefined, 2)
+  const verts = []
+  for (let i = 0; i < indices.length; i += 3) {
+    const i0 = indices[i], i1 = indices[i + 1], i2 = indices[i + 2]
+    subdivideTri(
+      coords[i0 * 2], coords[i0 * 2 + 1],
+      coords[i1 * 2], coords[i1 * 2 + 1],
+      coords[i2 * 2], coords[i2 * 2 + 1],
+      r, 10, verts // max 10° per edge — hugs the sphere
+    )
+  }
+  return verts
+}
+
 // ─── Component ───
 const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
   const mountRef = useRef(null)
   const linesRef = useRef(null)
+  const fillRef = useRef(null)
   const glowRef = useRef(null)
   const frameRef = useRef(null)
   const cameraRef = useRef(null)
@@ -49,9 +110,11 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
   const targetZoomRef = useRef(config.zoom ?? 1)
   const autoRotateRef = useRef(config.autoRotate ?? false)
   const labelsRef = useRef(config.labels || null)
+  const highlightRef = useRef(config.highlight || null)
 
   const countries = useMemo(() => feature(worldTopo, worldTopo.objects.countries), [])
 
+  // ─── Update refs + colors when config changes (no scene rebuild) ───
   useEffect(() => {
     const newRotY = lngToRotY(config.lng ?? 34)
     const newRotX = latToRotX(config.lat ?? 43)
@@ -66,6 +129,43 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
     targetZoomRef.current = config.zoom ?? 1
     autoRotateRef.current = willAuto
     labelsRef.current = config.labels || null
+    highlightRef.current = config.highlight || null
+
+    // highlight is now { isoId: '#hexColor', ... } or null/undefined
+    const hlMap = config.highlight || {}
+    const def = isDark ? [0.45, 0.47, 0.55] : [0.15, 0.15, 0.2]
+
+    // Update base border colors
+    if (linesRef.current) {
+      const arr = linesRef.current.geometry.getAttribute('color').array
+      const cids = linesRef.current.userData.segCountryIds
+      for (let i = 0; i < cids.length; i++) {
+        const hex = hlMap[cids[i]]
+        const c = hex ? hexToRgb(hex) : def
+        const j = i * 6
+        arr[j] = c[0]; arr[j+1] = c[1]; arr[j+2] = c[2]
+        arr[j+3] = c[0]; arr[j+4] = c[1]; arr[j+5] = c[2]
+      }
+      linesRef.current.geometry.getAttribute('color').needsUpdate = true
+    }
+
+    // Update fill mesh colors
+    if (fillRef.current) {
+      const arr = fillRef.current.geometry.getAttribute('color').array
+      const cids = fillRef.current.userData.triCountryIds
+      for (let i = 0; i < cids.length; i++) {
+        const hex = hlMap[cids[i]]
+        const c = hex ? hexToRgb(hex) : [0, 0, 0]
+        const a = hex ? 0.22 : 0.0
+        const j = i * 12
+        for (let v = 0; v < 3; v++) {
+          const k = j + v * 4
+          arr[k] = c[0]; arr[k+1] = c[1]; arr[k+2] = c[2]; arr[k+3] = a
+        }
+      }
+      fillRef.current.geometry.getAttribute('color').needsUpdate = true
+    }
+
     // Animate labels in with delay, out instantly
     clearTimeout(labelsTimerRef.current)
     if (config.labels && config.labels.length > 0) {
@@ -74,7 +174,7 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
     } else {
       setLabelsVisible(false)
     }
-  }, [config.lat, config.lng, config.zoom, config.autoRotate, config.labels])
+  }, [config.lat, config.lng, config.zoom, config.autoRotate, config.labels, config.highlight])
 
   useImperativeHandle(ref, () => ({
     pointOfView: ({ lat, lng, zoom }) => {
@@ -88,20 +188,31 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
   // Theme color update
   useEffect(() => {
     if (!linesRef.current) return
+    const hlMap = highlightRef.current || {}
+    const def = isDark ? [0.45, 0.47, 0.55] : [0.15, 0.15, 0.2]
+
+    // Base lines
     const arr = linesRef.current.geometry.getAttribute('color').array
     const cids = linesRef.current.userData.segCountryIds
-    const def = isDark ? [0.45, 0.47, 0.55] : [0.3, 0.3, 0.35]
     for (let i = 0; i < cids.length; i++) {
-      const c = COUNTRY_COLORS[cids[i]] || def
+      const hex = hlMap[cids[i]]
+      const c = hex ? hexToRgb(hex) : def
       const j = i * 6
       arr[j] = c[0]; arr[j+1] = c[1]; arr[j+2] = c[2]
       arr[j+3] = c[0]; arr[j+4] = c[1]; arr[j+5] = c[2]
     }
     linesRef.current.geometry.getAttribute('color').needsUpdate = true
     const u = linesRef.current.material.uniforms
-    u.uFrontOpacity.value = isDark ? 0.7 : 0.5
-    u.uBackOpacity.value = isDark ? 0.06 : 0.03
-    // Update glow color
+    u.uFrontOpacity.value = isDark ? 0.8 : 0.7
+    u.uBackOpacity.value = isDark ? 0.06 : 0.04
+
+    // Fill theme
+    if (fillRef.current) {
+      const fu = fillRef.current.material.uniforms
+      fu.uFrontOpacity.value = isDark ? 0.85 : 0.65
+      fu.uBackOpacity.value = isDark ? 0.0 : 0.0
+    }
+    // Glow color
     if (glowRef.current) {
       glowRef.current.material.uniforms.glowColor.value.set(
         isDark ? 0xffffff : 0x000000
@@ -109,7 +220,7 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
     }
   }, [isDark])
 
-  // ─── Three.js ───
+  // ─── Three.js scene (only rebuilds on theme change) ───
   useEffect(() => {
     const container = mountRef.current
     const w = window.innerWidth, h = window.innerHeight
@@ -126,14 +237,68 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
     groupRef.current = group
     scene.add(group)
 
-    // ── Country border lines ──
-    const defaultColor = isDark ? [0.45, 0.47, 0.55] : [0.3, 0.3, 0.35]
+    const hlMap = highlightRef.current || {}
+
+    // ── Facing shader (used by borders — RGB) ──
+    const facingVertRGB = `
+      attribute vec3 color;
+      varying vec3 vColor;
+      varying float vFacing;
+      void main() {
+        vColor = color;
+        vec3 wN = normalize(mat3(modelMatrix) * position);
+        vec3 wP = (modelMatrix * vec4(position, 1.0)).xyz;
+        vFacing = dot(wN, normalize(cameraPosition - wP));
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `
+    const facingFragRGB = `
+      varying vec3 vColor;
+      varying float vFacing;
+      uniform float uFrontOpacity;
+      uniform float uBackOpacity;
+      void main() {
+        float facing = smoothstep(-0.2, 0.4, vFacing);
+        gl_FragColor = vec4(vColor, mix(uBackOpacity, uFrontOpacity, facing));
+      }
+    `
+
+    // ── Facing shader with per-vertex RGBA (used by fill) ──
+    // Facing is computed per-pixel from interpolated world position
+    // to avoid visible seams between subdivided triangles
+    const facingVertRGBA = `
+      attribute vec4 color;
+      varying vec4 vColor;
+      varying vec3 vWorldPos;
+      void main() {
+        vColor = color;
+        vWorldPos = (modelMatrix * vec4(position, 1.0)).xyz;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `
+    const facingFragRGBA = `
+      varying vec4 vColor;
+      varying vec3 vWorldPos;
+      uniform float uFrontOpacity;
+      uniform float uBackOpacity;
+      void main() {
+        vec3 normal = normalize(vWorldPos);
+        float vFacing = dot(normal, normalize(cameraPosition - vWorldPos));
+        float facing = smoothstep(-0.2, 0.4, vFacing);
+        float alpha = vColor.a * mix(uBackOpacity, uFrontOpacity, facing);
+        gl_FragColor = vec4(vColor.rgb, alpha);
+      }
+    `
+
+    // ── Country border lines (base layer — ALL countries) ──
+    const defaultColor = isDark ? [0.45, 0.47, 0.55] : [0.15, 0.15, 0.2]
     const verts = []
     const vertColors = []
     const segCountryIds = []
 
     for (const feat of countries.features) {
-      const color = COUNTRY_COLORS[feat.id] || defaultColor
+      const hex = hlMap[feat.id]
+      const c = hex ? hexToRgb(hex) : defaultColor
       const { type, coordinates } = feat.geometry
       const rings = type === 'Polygon'
         ? coordinates
@@ -149,7 +314,7 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
           const a = latLngToVec3(lat1, lng1)
           const b = latLngToVec3(lat2, lng2)
           verts.push(a.x, a.y, a.z, b.x, b.y, b.z)
-          vertColors.push(color[0], color[1], color[2], color[0], color[1], color[2])
+          vertColors.push(c[0], c[1], c[2], c[0], c[1], c[2])
           segCountryIds.push(feat.id)
         }
       }
@@ -164,31 +329,11 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
       depthWrite: false,
       blending: THREE.NormalBlending,
       uniforms: {
-        uFrontOpacity: { value: isDark ? 0.7 : 0.5 },
-        uBackOpacity: { value: isDark ? 0.06 : 0.03 },
+        uFrontOpacity: { value: isDark ? 0.8 : 0.7 },
+        uBackOpacity: { value: isDark ? 0.06 : 0.04 },
       },
-      vertexShader: `
-        attribute vec3 color;
-        varying vec3 vColor;
-        varying float vFacing;
-        void main() {
-          vColor = color;
-          vec3 wN = normalize(mat3(modelMatrix) * position);
-          vec3 wP = (modelMatrix * vec4(position, 1.0)).xyz;
-          vFacing = dot(wN, normalize(cameraPosition - wP));
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        varying vec3 vColor;
-        varying float vFacing;
-        uniform float uFrontOpacity;
-        uniform float uBackOpacity;
-        void main() {
-          float facing = smoothstep(-0.2, 0.4, vFacing);
-          gl_FragColor = vec4(vColor, mix(uBackOpacity, uFrontOpacity, facing));
-        }
-      `,
+      vertexShader: facingVertRGB,
+      fragmentShader: facingFragRGB,
     })
 
     const lines = new THREE.LineSegments(geo, mat)
@@ -196,43 +341,78 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
     group.add(lines)
     linesRef.current = lines
 
-    // ── Focus countries: second pass at slight offset for thicker look ──
-    const focusVerts = []
-    const focusColors = []
+    // ── Filled country surfaces (ALL registry countries) ──
+    const fillVerts = []
+    const fillColors = [] // RGBA
+    const triCountryIds = []
     for (const feat of countries.features) {
-      if (!COUNTRY_COLORS[feat.id]) continue
-      const color = COUNTRY_COLORS[feat.id]
+      if (!ALL_IDS.has(feat.id)) continue
+      const hex = hlMap[feat.id]
+      const c = hex ? hexToRgb(hex) : [0, 0, 0]
+      const alpha = hex ? 0.22 : 0.0
       const { type, coordinates } = feat.geometry
-      const rings = type === 'Polygon'
-        ? coordinates
+      const polySets = type === 'Polygon'
+        ? [coordinates]
         : type === 'MultiPolygon'
-          ? coordinates.flat()
+          ? coordinates
           : []
-      for (const ring of rings) {
-        for (let i = 0; i < ring.length - 1; i++) {
-          const [lng1, lat1] = ring[i]
-          const [lng2, lat2] = ring[i + 1]
-          if (Math.abs(lng2 - lng1) > 90) continue
-          // Slightly larger radius so it sits just above
-          const a = latLngToVec3(lat1, lng1, 1.002)
-          const b = latLngToVec3(lat2, lng2, 1.002)
-          focusVerts.push(a.x, a.y, a.z, b.x, b.y, b.z)
-          focusColors.push(color[0], color[1], color[2], color[0], color[1], color[2])
+
+      for (const polyCoords of polySets) {
+        const outerRing = polyCoords[0]
+        const holes = polyCoords.slice(1)
+        if (outerRing.length < 4) continue
+
+        // For antimeridian-crossing polygons, shift negative longitudes +360°
+        // so earcut sees correct 2D topology. Subdivision + sin/cos periodicity
+        // ensure correct sphere projection even for shifted coordinates.
+        let outerForTri = outerRing
+        let holesForTri = holes
+        let crosses = false
+        for (let i = 0; i < outerRing.length - 1; i++) {
+          if (Math.abs(outerRing[i + 1][0] - outerRing[i][0]) > 90) { crosses = true; break }
+        }
+        if (crosses) {
+          const shift = ([lng, lat]) => [lng < 0 ? lng + 360 : lng, lat]
+          outerForTri = outerRing.map(shift)
+          holesForTri = holes.map(h => h.map(shift))
+        }
+
+        const triVerts = triangulateRing(outerForTri, holesForTri, 1.001)
+        for (let i = 0; i < triVerts.length; i += 3) {
+          fillVerts.push(triVerts[i], triVerts[i+1], triVerts[i+2])
+        }
+        const numTris = triVerts.length / 9
+        for (let t = 0; t < numTris; t++) {
+          fillColors.push(
+            c[0], c[1], c[2], alpha,
+            c[0], c[1], c[2], alpha,
+            c[0], c[1], c[2], alpha,
+          )
+          triCountryIds.push(feat.id)
         }
       }
     }
-    const focusGeo = new THREE.BufferGeometry()
-    focusGeo.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(focusVerts), 3))
-    focusGeo.setAttribute('color', new THREE.Float32BufferAttribute(new Float32Array(focusColors), 3))
-    const focusMat = mat.clone()
-    focusMat.uniforms = {
-      uFrontOpacity: { value: isDark ? 0.85 : 0.65 },
-      uBackOpacity: { value: isDark ? 0.04 : 0.02 },
-    }
-    group.add(new THREE.LineSegments(focusGeo, focusMat))
+    const fillGeo = new THREE.BufferGeometry()
+    fillGeo.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(fillVerts), 3))
+    fillGeo.setAttribute('color', new THREE.Float32BufferAttribute(new Float32Array(fillColors), 4))
+    const fillMat = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.NormalBlending,
+      side: THREE.DoubleSide,
+      uniforms: {
+        uFrontOpacity: { value: isDark ? 0.85 : 0.65 },
+        uBackOpacity: { value: 0.0 },
+      },
+      vertexShader: facingVertRGBA,
+      fragmentShader: facingFragRGBA,
+    })
+    const fillMesh = new THREE.Mesh(fillGeo, fillMat)
+    fillMesh.userData.triCountryIds = triCountryIds
+    group.add(fillMesh)
+    fillRef.current = fillMesh
 
-    // ── Globe edge glow — subtle ring that marks the curvature ──
-    // Glow — larger sphere, wider rim, more visible
+    // ── Globe edge glow ──
     const glowGeo = new THREE.SphereGeometry(1.04, 64, 64)
     const glowMat = new THREE.ShaderMaterial({
       transparent: true,
@@ -256,7 +436,6 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
         varying vec3 vViewPos;
         void main() {
           float rim = 1.0 - abs(dot(vNormal, vViewPos));
-          // Tight, clean edge — just the outline of the sphere
           float intensity = pow(rim, 6.0) * 0.5;
           gl_FragColor = vec4(glowColor, intensity);
         }
@@ -284,8 +463,6 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
         targetRotYRef.current -= 0.002
       }
 
-      // Correct rotation order: Rx then Ry in local frame
-      // = world Ry (longitude) then world Rx (latitude)
       group.rotation.set(0, 0, 0)
       group.rotateX(rotXRef.current)
       group.rotateY(rotYRef.current)
@@ -293,8 +470,6 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
       camera.position.z = 3.15 / zoomRef.current
 
       const aspect = window.innerWidth / window.innerHeight
-      // Hero/ThankYou (autoRotate): push further right so curve fills corners
-      // Content slides: smaller offset to keep Black Sea centered
       const offsetFactor = autoRotateRef.current ? 0.38 : 0.18
       group.position.x = (aspect * offsetFactor) / Math.max(zoomRef.current, 1)
 
@@ -308,10 +483,8 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
           const v = latLngToVec3(lb.lat, lb.lng)
           v.applyMatrix4(group.matrixWorld)
           v.project(camera)
-          // v is now in NDC (-1 to 1). Convert to screen pixels
           const sx = (v.x * 0.5 + 0.5) * window.innerWidth
           const sy = (-v.y * 0.5 + 0.5) * window.innerHeight
-          // Check if on front side of globe (z < 1 in NDC)
           const worldPos = latLngToVec3(lb.lat, lb.lng)
           worldPos.applyMatrix4(group.matrixWorld)
           const camDir = new THREE.Vector3().subVectors(worldPos, camera.position).normalize()
@@ -320,7 +493,7 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
           projected.push({
             name: lb.name, x: sx, y: sy,
             color: lb.color,
-            visible: facing < 0, // facing toward camera
+            visible: facing < 0,
             offsetY: lb.offsetY ?? -40,
           })
         }
@@ -367,7 +540,7 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
             ? `opacity 0.5s ease ${i * 0.08}s`
             : 'opacity 0.05s ease 0s',
         }}>
-          {/* Label box — above */}
+          {/* Label box */}
           <div style={{
             padding: '3px 10px',
             background: isDark ? 'rgba(13,17,23,0.8)' : 'rgba(255,255,255,0.85)',
@@ -384,13 +557,13 @@ const Globe = forwardRef(function Globe({ config = {}, isDark = true }, ref) {
           }}>
             {lb.name}
           </div>
-          {/* Pin line — below label, pointing down to the country */}
+          {/* Pin line */}
           <div style={{
             width: 1,
             height: Math.abs(lb.offsetY),
             background: lb.color || (isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.2)'),
           }} />
-          {/* Small dot at the tip */}
+          {/* Dot at tip */}
           <div style={{
             width: 4,
             height: 4,

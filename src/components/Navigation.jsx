@@ -351,7 +351,7 @@ function animateOut(section, direction) {
 // ===========================================================================
 // Navigation component
 // ===========================================================================
-export default function Navigation({ currentIndex, totalScreens, goToSection, isAnimating, setIsAnimating, isDark }) {
+export default function Navigation({ currentIndex, totalScreens, goToSection, isAnimating, setIsAnimating, isDark, globeRef }) {
   const wrapperRef = useRef(null)
   const prevIndexRef = useRef(0)
   const initializedRef = useRef(false)
@@ -499,7 +499,7 @@ export default function Navigation({ currentIndex, totalScreens, goToSection, is
           return (
             <div key={i} className={`section ${i === 0 ? 'active' : ''}`}>
               <div className="section-inner">
-                <ScreenComponent isDark={isDark} />
+                <ScreenComponent isDark={isDark} globeRef={globeRef} />
               </div>
             </div>
           )
