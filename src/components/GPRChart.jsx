@@ -180,5 +180,5 @@ export default function GPRChart({ isDark }) {
     }
   }, [isDark])
 
-  return <canvas ref={canvasRef} className="gpr-chart-canvas" height="320" />
+  return <canvas ref={canvasRef} className="gpr-chart-canvas" height="420" />
 }

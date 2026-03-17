@@ -1,48 +1,35 @@
-export default function S06_Timeline({ isDark }) {
-  const events = [
-    { year: '2008', text: 'Russia-Georgia war. Moscow sets a precedent for territorial intervention.', critical: false, side: 'left' },
-    { year: '2014', text: 'Annexation of Crimea. Western sanctions begin.', critical: false, side: 'right' },
-    { year: '2017', text: 'NotPetya cyberattack via Ukrainian software M.E.Doc. $10B global damage.', critical: false, side: 'left' },
-    { year: '2022', critical: true, side: 'right' },
-    { year: '2024', text: '1/3 of Black Sea Fleet destroyed by drones. Fleet declared "functionally inactive."', critical: false, side: 'left' },
-    { year: '2025', text: 'EU Black Sea Strategy published. TurkStream becomes sole pipeline route.', critical: false, side: 'right' },
-  ]
-
-  const renderContent = (e) => (
-    <div className="tl-content" style={e.critical ? { borderColor: 'rgba(220,38,38,0.3)' } : {}}>
-      <div className="tl-year">{e.year}</div>
-      <div className="tl-text">
-        {e.critical ? (
-          <><strong style={{ color: 'var(--red)' }}>Full-scale invasion.</strong> GPR Index hits 167.3. Montreux wartime provisions invoked.</>
-        ) : e.text}
+// Factory: creates a timeline event slide component
+// Each event = one slide with big date + short text, globe shows relevant region
+export function createTimelineEvent(year, text, isCritical = false) {
+  return function TimelineEvent({ isDark }) {
+    return (
+      <div style={{ maxWidth: 520, marginRight: 'auto' }}>
+        <div className="tag mono fade-element">Historical Escalation</div>
+        <div className="fade-element" style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '4.5em',
+          fontWeight: 700,
+          color: isCritical ? 'var(--red, #D63B3B)' : 'var(--coral, #E8715A)',
+          lineHeight: 1,
+          marginTop: 8,
+        }}>
+          {year}
+        </div>
+        <div className="accent-line fade-element" />
+        <p className="fade-element" style={{
+          fontSize: '1.2em',
+          lineHeight: 1.7,
+          marginTop: 20,
+          color: 'var(--text)',
+          opacity: 0.92,
+          fontFamily: 'var(--font-body)',
+        }}>
+          {text}
+        </p>
       </div>
-    </div>
-  )
-
-  return (
-    <div style={{ maxWidth: '650px', marginRight: 'auto' }}>
-      <div className="tag mono fade-element">Historical Escalation</div>
-      <h2 className="fade-element">From tension to war</h2>
-      <div className="accent-line fade-element"></div>
-      <div className="timeline">
-        {events.map((e, i) => (
-          <div key={i} className={`tl-entry fade-element ${e.critical ? 'critical' : ''}`}>
-            {e.side === 'left' ? (
-              <>
-                {renderContent(e)}
-                <div className="tl-dot"></div>
-                <div style={{ width: '44%' }}></div>
-              </>
-            ) : (
-              <>
-                <div style={{ width: '44%' }}></div>
-                <div className="tl-dot"></div>
-                {renderContent(e)}
-              </>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+    )
+  }
 }
+
+// Keep default export for backwards compatibility
+export default createTimelineEvent('—', '...')

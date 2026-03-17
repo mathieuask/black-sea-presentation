@@ -11,7 +11,7 @@ export default function S25_Conclusion({ isDark }) {
       <div className="accent-line" style={{ background: 'linear-gradient(90deg, var(--red), var(--amber))' }}></div>
       <div className="conclusion-grid">
         {items.map((item, i) => (
-          <div key={i} className="card fade-element" style={{ borderTop: `3px solid ${item.color}` }}>
+          <div key={i} className="card fade-element" style={{ borderRadius: 12 }}>
             <div style={{ fontFamily: "'Space Grotesk'", fontSize: '1.05em', marginBottom: 10 }}>{item.title}</div>
             <p style={{ fontSize: '0.8em', maxWidth: '100%' }}>{item.desc}</p>
           </div>

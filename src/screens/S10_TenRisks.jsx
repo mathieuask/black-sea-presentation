@@ -12,7 +12,7 @@ export default function S10_TenRisks({ isDark }) {
     { idx: '10', title: 'Cyber Threats', ex: 'NotPetya ($10B), GPS spoofing' },
   ]
   return (
-    <div style={{ maxWidth: '650px', marginRight: 'auto' }}>
+    <div style={{ maxWidth: '780px', marginRight: 'auto' }}>
       <div className="tag mono fade-element">Risk Mapping</div>
       <h2 className="fade-element">All ten risks, one region</h2>
       <div className="accent-line fade-element"></div>
@@ -20,8 +20,10 @@ export default function S10_TenRisks({ isDark }) {
         {risks.map((r, i) => (
           <div key={i} className="risk-item fade-element">
             <span className="risk-idx">{r.idx}</span>
-            <span className="risk-title">{r.title}</span>
-            <span className="risk-ex">&bull; {r.ex}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <span className="risk-title">{r.title}</span>
+              <span className="risk-ex">{r.ex}</span>
+            </div>
           </div>
         ))}
       </div>

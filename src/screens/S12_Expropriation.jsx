@@ -1,30 +1,68 @@
 export default function S12_Expropriation({ isDark }) {
-  const bars = [
-    { company: 'BP', width: '82%', text: '$25.5B write-down', style: {} },
-    { company: 'TotalEnergies', width: '47%', text: '$14.8B loss', style: {} },
-    { company: 'Shell', width: '16%', text: '$5.0B loss', style: { background: 'linear-gradient(to right, var(--amber), #fbbf24)' } },
-    { company: 'ExxonMobil', width: '11%', text: '$3.4B loss', style: { background: 'linear-gradient(to right, var(--amber), #fbbf24)' } },
-    { company: 'Renault', width: '15%', text: '\u20AC2.2B', style: { background: 'var(--text-muted)' } },
+  const losses = [
+    { company: 'BP', amount: '$25.5B', note: 'Rosneft stake write-down' },
+    { company: 'TotalEnergies', amount: '$14.8B', note: 'Arctic LNG & Novatek' },
+    { company: 'Shell', amount: '$5.0B', note: 'Sakhalin-2 seizure' },
+    { company: 'ExxonMobil', amount: '$3.4B', note: 'Sakhalin-1 exit' },
+    { company: 'Renault', amount: '\u20AC2.2B', note: 'AvtoVAZ nationalized' },
   ]
   return (
-    <div style={{ maxWidth: '650px', marginRight: 'auto' }}>
+    <div style={{ maxWidth: '520px', marginRight: 'auto' }}>
       <div className="tag mono fade-element" style={{ borderColor: 'var(--red)', color: 'var(--red)' }}>Risk 04 // Expropriation</div>
       <h2 className="fade-element">The corporate exodus</h2>
       <div className="accent-line fade-element" style={{ background: 'linear-gradient(90deg, var(--red), var(--amber))' }}></div>
-      <p className="fade-element" style={{ fontSize: '0.85em' }}>
-        Russia systematically seized foreign assets. No legal criteria. Presidential discretion only.
+
+      <p className="fade-element" style={{ fontSize: '1.05em', lineHeight: 1.7, color: 'var(--text-secondary)', marginTop: 16 }}>
+        Russia systematically seized foreign assets. No legal criteria &mdash; presidential discretion only.
       </p>
-      <div style={{ marginTop: 24 }}>
-        {bars.map((b, i) => (
-          <div key={i} className="loss-bar-row fade-element">
-            <span className="loss-company">{b.company}</span>
-            <div className="loss-bar" style={{ width: b.width, ...b.style }}>{b.text}</div>
+
+      {/* Key stat */}
+      <div className="fade-element" style={{
+        background: 'var(--card-bg)',
+        border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: 12,
+        padding: '20px 24px',
+        marginTop: 24,
+        display: 'flex',
+        alignItems: 'baseline',
+        gap: 16
+      }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '2.2em', fontWeight: 700, color: 'var(--red)', lineHeight: 1 }}>$50.9B</span>
+        <span style={{ color: 'var(--text-secondary)', fontSize: '0.95em' }}>total Western corporate losses</span>
+      </div>
+
+      {/* Company list */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 20 }}>
+        {losses.map((l, i) => (
+          <div key={i} className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1em', fontWeight: 600, color: 'var(--amber)', minWidth: 72, textAlign: 'right' }}>{l.amount}</span>
+            <span style={{ color: 'var(--text)', fontWeight: 600 }}>{l.company}</span>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.85em' }}>&mdash; {l.note}</span>
           </div>
         ))}
       </div>
-      <p className="fade-element" style={{ marginTop: 16, fontSize: '0.8em', color: 'var(--red)' }}>
-        In 2024: 157 companies worth 1.1 trillion roubles nationalized. Q1 2025: another 50 entities worth 800B roubles.
-      </p>
+
+      {/* 2024-2025 escalation */}
+      <div className="fade-element" style={{
+        background: 'var(--card-bg)',
+        border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: 12,
+        padding: '16px 24px',
+        marginTop: 20
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ color: 'var(--red)', fontSize: '1.2em' }}>&#9679;</span>
+          <span style={{ color: 'var(--text-secondary)', fontSize: '0.95em', lineHeight: 1.6 }}>
+            <strong style={{ color: 'var(--text)' }}>2024:</strong> 157 companies worth 1.1T roubles nationalized
+          </span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 8 }}>
+          <span style={{ color: 'var(--red)', fontSize: '1.2em' }}>&#9679;</span>
+          <span style={{ color: 'var(--text-secondary)', fontSize: '0.95em', lineHeight: 1.6 }}>
+            <strong style={{ color: 'var(--text)' }}>Q1 2025:</strong> another 50 entities worth 800B roubles seized
+          </span>
+        </div>
+      </div>
     </div>
   )
 }

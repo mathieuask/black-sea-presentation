@@ -5,7 +5,14 @@ import S02_Agenda from './screens/S02_Agenda'
 import S03_PartIDivider from './screens/S03_PartIDivider'
 import S04_KeyStats from './screens/S04_KeyStats'
 import S05_Geography from './screens/S05_Geography'
-import S06_Timeline from './screens/S06_Timeline'
+import { createTimelineEvent } from './screens/S06_Timeline'
+
+const S06_TL2008 = createTimelineEvent('2008', 'Russia-Georgia war. Moscow sets a precedent for territorial intervention in the post-Soviet space.')
+const S06_TL2014 = createTimelineEvent('2014', 'Annexation of Crimea. Western sanctions begin. Russia gains control of Sevastopol naval base.')
+const S06_TL2017 = createTimelineEvent('2017', 'NotPetya cyberattack launched via Ukrainian software M.E.Doc. $10 billion in global damage.')
+const S06_TL2022 = createTimelineEvent('2022', 'Full-scale invasion. GPR Index hits 167.3. Turkey invokes Montreux wartime provisions for the first time since WWII.', true)
+const S06_TL2024 = createTimelineEvent('2024', '⅓ of Russia\'s Black Sea Fleet destroyed by Ukrainian naval drones. Fleet declared "functionally inactive."')
+const S06_TL2025 = createTimelineEvent('2025', 'EU Black Sea Strategy published. TurkStream becomes Europe\'s sole Russian gas pipeline route.')
 import S07_PartIIDivider from './screens/S07_PartIIDivider'
 import S08_ActorRussia from './screens/S08_ActorRussia'
 import S08_ActorNATO from './screens/S08_ActorNATO'
@@ -87,7 +94,7 @@ export const screens = [
 
   // Geography — "Six nations. One sea. One chokepoint."
   { component: S05_Geography,
-    globe: { lat: 42, lng: 32, zoom: 2.6, autoRotate: false,
+    globe: { lat: 44, lng: 34, zoom: 2.0, autoRotate: false,
       highlight: BLACK_SEA_6,
       labels: [
         label('RUS', '#D63B3B'),
@@ -97,13 +104,73 @@ export const screens = [
         label('BGR', '#8B6DB0'),
         label('GEO', '#5DAE7C'),
         { name: 'Bosphorus', lat: 41, lng: 29, color: '#E8715A', offsetY: -28 },
+        { name: 'Crimea', lat: 45, lng: 34, color: '#D63B3B', offsetY: -20 },
       ] },
     transition: 'slide' },
 
-  // Timeline — pull back slightly
-  { component: S06_Timeline,
-    globe: { lat: 44, lng: 34, zoom: 2.0, autoRotate: false,
-      highlight: BLACK_SEA_6 },
+  // Timeline — one slide per event, globe focuses on the relevant region
+
+  // 2008: Russia-Georgia war → focus Georgia + Russia
+  { component: S06_TL2008,
+    globe: { lat: 42, lng: 44, zoom: 2.4, autoRotate: false,
+      highlight: { ...hl(['RUS'], '#D63B3B'), ...hl(['GEO'], '#5DAE7C') },
+      labels: [
+        label('RUS', '#D63B3B'),
+        label('GEO', '#5DAE7C'),
+        { name: 'Tbilisi', lat: 41.7, lng: 44.8, color: '#5DAE7C', offsetY: -24 },
+      ] },
+    transition: 'slide' },
+
+  // 2014: Annexation of Crimea → zoom on Crimea/Ukraine
+  { component: S06_TL2014,
+    globe: { lat: 45, lng: 34, zoom: 2.4, autoRotate: false,
+      highlight: { ...hl(['UKR'], '#E5A84B'), ...hl(['RUS'], '#D63B3B') },
+      labels: [
+        label('UKR', '#E5A84B'),
+        { name: 'Crimea', lat: 45, lng: 34, color: '#D63B3B', offsetY: -26 },
+        { name: 'Sevastopol', lat: 44.6, lng: 33.5, color: '#D63B3B', offsetY: -20 },
+      ] },
+    transition: 'slide' },
+
+  // 2017: NotPetya → focus Ukraine
+  { component: S06_TL2017,
+    globe: { lat: 50, lng: 31, zoom: 2.2, autoRotate: false,
+      highlight: hl(['UKR'], '#E5A84B'),
+      labels: [
+        { name: '🇺🇦 Ukraine', lat: 47, lng: 34, color: '#E5A84B', offsetY: -32 },
+        { name: 'Kyiv', lat: 50.4, lng: 30.5, color: '#E5A84B', offsetY: -20 },
+      ] },
+    transition: 'slide' },
+
+  // 2022: Full-scale invasion → Ukraine + Russia, wide view
+  { component: S06_TL2022,
+    globe: { lat: 48, lng: 36, zoom: 2.0, autoRotate: false,
+      highlight: { ...hl(['UKR'], '#E5A84B'), ...hl(['RUS'], '#D63B3B') },
+      labels: [
+        label('UKR', '#E5A84B'),
+        label('RUS', '#D63B3B'),
+      ] },
+    transition: 'slide' },
+
+  // 2024: Fleet destroyed → Black Sea focus
+  { component: S06_TL2024,
+    globe: { lat: 45, lng: 34, zoom: 2.0, autoRotate: false,
+      highlight: { ...hl(['UKR'], '#E5A84B'), ...hl(['RUS'], '#D63B3B') },
+      labels: [
+        { name: 'Crimea', lat: 45, lng: 34, color: '#D63B3B', offsetY: -26 },
+        { name: 'Sevastopol', lat: 44.6, lng: 33.5, color: '#D63B3B', offsetY: -16 },
+        { name: 'Black Sea', lat: 42.5, lng: 35, offsetY: -22 },
+      ] },
+    transition: 'slide' },
+
+  // 2025: EU Strategy + TurkStream → Turkey/Black Sea
+  { component: S06_TL2025,
+    globe: { lat: 43, lng: 32, zoom: 2.2, autoRotate: false,
+      highlight: { ...hl(['TUR'], '#E8715A'), ...BLACK_SEA_6 },
+      labels: [
+        label('TUR', '#E8715A'),
+        { name: 'TurkStream', lat: 42, lng: 30, color: '#E8715A', offsetY: -24 },
+      ] },
     transition: 'slide' },
 
   // --- PART II: ACTORS ---
@@ -170,25 +237,39 @@ export const screens = [
   // Wars — ZOOM INTO UKRAINE
   { component: S11_Wars,
     globe: { lat: 46, lng: 34, zoom: 2.8, autoRotate: false,
-      highlight: BLACK_SEA_6 },
+      highlight: { ...hl(['UKR'], '#E5A84B'), ...hl(['RUS'], '#D63B3B') },
+      labels: [
+        label('UKR', '#E5A84B'),
+        label('RUS', '#D63B3B'),
+      ] },
     transition: 'country-focus' },
 
   // Expropriation — ZOOM INTO RUSSIA
   { component: S12_Expropriation,
-    globe: { lat: 56, lng: 40, zoom: 2.5, autoRotate: false,
-      highlight: BLACK_SEA_6 },
+    globe: { lat: 56, lng: 40, zoom: 2.2, autoRotate: false,
+      highlight: hl(['RUS'], '#D63B3B'),
+      labels: [label('RUS', '#D63B3B')] },
     transition: 'country-focus' },
 
   // Energy — ZOOM INTO TURKEY/TURKSTREAM
   { component: S13_Energy,
     globe: { lat: 43, lng: 33, zoom: 2.5, autoRotate: false,
-      highlight: BLACK_SEA_6 },
+      highlight: { ...hl(['TUR'], '#E8715A'), ...hl(['RUS'], '#D63B3B') },
+      labels: [
+        label('TUR', '#E8715A'),
+        { name: 'TurkStream', lat: 42, lng: 30, color: '#E8715A', offsetY: -24 },
+        { name: 'Bosphorus', lat: 41, lng: 29, color: '#E8715A', offsetY: -16 },
+      ] },
     transition: 'country-focus' },
 
-  // Food — ZOOM INTO UKRAINE (grain ports)
+  // Food — Black Sea region (grain routes)
   { component: S14_Food,
-    globe: { lat: 46, lng: 31, zoom: 3.0, autoRotate: false,
-      highlight: BLACK_SEA_6 },
+    globe: { lat: 44, lng: 33, zoom: 2.2, autoRotate: false,
+      highlight: { ...hl(['UKR'], '#E5A84B'), ...hl(['RUS'], '#D63B3B') },
+      labels: [
+        label('UKR', '#E5A84B'),
+        { name: 'Odesa', lat: 46.5, lng: 30.7, color: '#E5A84B', offsetY: -22 },
+      ] },
     transition: 'country-focus' },
 
   // Cyber — pull back (NotPetya was global)
@@ -211,7 +292,7 @@ export const screens = [
 
   // GPR Chart — overview
   { component: S18_GPRChart,
-    globe: { lat: 43, lng: 34, zoom: 1.8, autoRotate: false,
+    globe: { lat: 43, lng: 34, zoom: 2.0, autoRotate: false,
       highlight: BLACK_SEA_6 },
     transition: 'slide' },
 
@@ -227,16 +308,25 @@ export const screens = [
       highlight: BLACK_SEA_6 },
     transition: 'dramatic' },
 
-  // Shipping — ZOOM INTO CONSTANTA PORT (Romania)
+  // Shipping — Constanta & Danube Corridor
   { component: S21_Shipping,
-    globe: { lat: 44, lng: 29, zoom: 3.0, autoRotate: false,
-      highlight: BLACK_SEA_6 },
+    globe: { lat: 45, lng: 28, zoom: 2.4, autoRotate: false,
+      highlight: { ...hl(['ROU'], '#5B9BD5'), ...hl(['UKR'], '#E5A84B') },
+      labels: [
+        label('ROU', '#5B9BD5'),
+        { name: 'Constanta', lat: 44.2, lng: 28.6, color: '#5B9BD5', offsetY: -22 },
+        { name: 'Danube Corridor', lat: 45.3, lng: 29.5, color: '#5B9BD5', offsetY: -18 },
+      ] },
     transition: 'country-focus' },
 
   // FDI — ZOOM INTO ROMANIA/BULGARIA
   { component: S22_FDI,
     globe: { lat: 44, lng: 27, zoom: 2.8, autoRotate: false,
-      highlight: BLACK_SEA_6 },
+      highlight: { ...hl(['ROU'], '#5B9BD5'), ...hl(['BGR'], '#8B6DB0') },
+      labels: [
+        label('ROU', '#5B9BD5'),
+        label('BGR', '#8B6DB0'),
+      ] },
     transition: 'country-focus' },
 
   // --- PART VI: UAMR FRAMEWORK ---

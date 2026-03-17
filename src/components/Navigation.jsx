@@ -302,7 +302,7 @@ function animateIn(section, direction) {
   // --- DEFAULT ---
   } else {
     animateHeaders(tl, section, 0.02)
-    staggerFadeElements(tl, elements, 0.05, { fromX: dir * 40, fromY: 20, duration: 0.55, stagger: 0.07 })
+    staggerFadeElements(tl, elements, 0.05, { fromY: 25, duration: 0.55, stagger: 0.07 })
   }
 
   // Trigger counters

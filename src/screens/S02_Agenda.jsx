@@ -15,7 +15,7 @@ export default function S02_Agenda({ isDark }) {
       <div className="accent-line fade-element"></div>
       <div className="agenda-grid" style={{ gridTemplateColumns: '1fr' }}>
         {items.map((item, i) => (
-          <div key={i} className="agenda-item fade-element" style={{ borderLeftColor: item.color }}>
+          <div key={i} className="agenda-item fade-element">
             <span className="agenda-num" style={{ color: item.numColor }}>{item.num}</span>
             <span className="agenda-text">{item.text}</span>
           </div>

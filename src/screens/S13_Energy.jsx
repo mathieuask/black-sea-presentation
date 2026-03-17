@@ -1,42 +1,65 @@
 export default function S13_Energy({ isDark }) {
   return (
-    <div style={{ maxWidth: '650px', marginRight: 'auto' }}>
+    <div style={{ maxWidth: '520px', marginRight: 'auto' }}>
       <div className="tag mono fade-element" style={{ borderColor: 'var(--amber)', color: 'var(--amber)' }}>Risk 07 // Energy Weapon</div>
       <h2 className="fade-element">TurkStream:<br/>single point of failure</h2>
       <div className="accent-line fade-element" style={{ background: 'linear-gradient(90deg, var(--amber), var(--red))' }}></div>
-      <div className="split-layout" style={{ marginTop: 20 }}>
+
+      <p className="fade-element" style={{ fontSize: '1.05em', lineHeight: 1.7, color: 'var(--text-secondary)', marginTop: 16 }}>
+        Europe&apos;s sole remaining Russian gas pipeline after Ukraine transit ended Dec 31, 2024.
+      </p>
+
+      {/* Key stats card */}
+      <div className="fade-element" style={{
+        background: 'var(--card-bg)',
+        border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: 12,
+        padding: '20px 24px',
+        marginTop: 24,
+        display: 'flex',
+        gap: 32
+      }}>
         <div>
-          <p className="fade-element">
-            <strong>31.5 bcm/year capacity</strong> &mdash; Europe&apos;s sole remaining Russian gas pipeline after Ukraine transit ended Dec 31, 2024.
-          </p>
-          <p className="fade-element" style={{ marginTop: 14 }}>
-            <strong style={{ color: 'var(--red)' }}>March 2026:</strong> 12 drone attacks in two weeks on compressor stations. If disrupted, gas prices could spike <strong style={{ color: 'var(--red)' }}>30&ndash;50%</strong> within days.
-          </p>
-          <div className="gauge-row fade-element">
-            <div className="gauge-container">
-              <svg className="gauge-svg" width="100" height="100" viewBox="0 0 100 100">
-                <circle className="gauge-bg" cx="50" cy="50" r="45"/>
-                <circle className="gauge-fill danger" cx="50" cy="50" r="45" data-percent="98"/>
-                <text className="gauge-value" x="50" y="50" style={{ transform: 'rotate(90deg)', transformOrigin: 'center' }}>98%</text>
-              </svg>
-              <div className="gauge-label-text">TurkStream<br/>utilization</div>
-            </div>
-            <div className="gauge-container">
-              <svg className="gauge-svg" width="100" height="100" viewBox="0 0 100 100">
-                <circle className="gauge-bg" cx="50" cy="50" r="45"/>
-                <circle className="gauge-fill warning" cx="50" cy="50" r="45" data-percent="24"/>
-                <text className="gauge-value" x="50" y="50" style={{ transform: 'rotate(90deg)', transformOrigin: 'center' }}>24%</text>
-              </svg>
-              <div className="gauge-label-text">EU gas storage<br/><span style={{ color: 'var(--red)' }}>vs. 41% avg</span></div>
-            </div>
-          </div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2em', fontWeight: 700, color: 'var(--amber)', lineHeight: 1 }}>31.5</div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.85em', marginTop: 4 }}>bcm/year capacity</div>
         </div>
-        <div className="fade-element" style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="card" style={{ padding: 30 }}>
-            <p style={{ fontSize: '1em', color: 'var(--amber)', fontFamily: "'JetBrains Mono',monospace", fontWeight: 600 }}>&#9889; ALERT</p>
-            <p style={{ marginTop: 12, fontSize: '0.85em' }}>
-              A TurkStream disruption would leave 8 EU member states without their primary gas supply route within 48 hours.
-            </p>
+        <div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2em', fontWeight: 700, color: 'var(--red)', lineHeight: 1 }}>98%</div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.85em', marginTop: 4 }}>utilization rate</div>
+        </div>
+        <div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2em', fontWeight: 700, color: 'var(--red)', lineHeight: 1 }}>8</div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.85em', marginTop: 4 }}>EU states dependent</div>
+        </div>
+      </div>
+
+      {/* Threat details */}
+      <div className="fade-element" style={{
+        background: 'var(--card-bg)',
+        border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: 12,
+        padding: '20px 24px',
+        marginTop: 16
+      }}>
+        <div style={{ fontSize: '0.85em', fontFamily: 'var(--font-mono)', color: 'var(--red)', fontWeight: 600, marginBottom: 12 }}>ACTIVE THREATS</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ color: 'var(--red)', fontSize: '1.2em' }}>&#9679;</span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '0.95em', lineHeight: 1.6 }}>
+              <strong style={{ color: 'var(--text)' }}>March 2026:</strong> 12 drone attacks in two weeks on compressor stations
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ color: 'var(--amber)', fontSize: '1.2em' }}>&#9679;</span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '0.95em', lineHeight: 1.6 }}>
+              If disrupted, gas prices could spike <strong style={{ color: 'var(--red)' }}>30&ndash;50%</strong> within days
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ color: 'var(--amber)', fontSize: '1.2em' }}>&#9679;</span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '0.95em', lineHeight: 1.6 }}>
+              EU gas storage at <strong style={{ color: 'var(--red)' }}>24%</strong> vs. 41% seasonal average
+            </span>
           </div>
         </div>
       </div>
