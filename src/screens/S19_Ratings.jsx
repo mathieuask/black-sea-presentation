@@ -8,7 +8,7 @@ export default function S19_Ratings({ isDark }) {
     { country: 'Russia', moodys: 'W/D', sp: 'W/D', fitch: 'W/D', grade: 'Withdrawn', color: 'var(--red)' },
   ]
   return (
-    <div style={{ maxWidth: '650px', marginRight: 'auto', marginLeft: '60px', background: 'rgba(8,8,10,0.65)', borderRadius: '16px', backdropFilter: 'blur(12px)', padding: '48px' }}>
+    <div style={{ maxWidth: '650px', marginRight: 'auto' }}>
       <div className="tag mono fade-element">Sovereign Ratings</div>
       <h2 className="fade-element">Credit risk stratification</h2>
       <div className="accent-line fade-element"></div>

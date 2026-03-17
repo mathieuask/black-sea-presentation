@@ -7,7 +7,7 @@ export default function S08_Actors({ isDark }) {
     { icon: '\u2693', name: 'China', desc: '$600M Anaklia port in Georgia. Middle Corridor access. Belt & Road footprint.', color: 'var(--green)' },
   ]
   return (
-    <div style={{ maxWidth: '780px', marginRight: 'auto', marginLeft: '60px', background: 'rgba(8,8,10,0.65)', borderRadius: '16px', backdropFilter: 'blur(12px)', padding: '48px' }}>
+    <div style={{ maxWidth: '780px', marginRight: 'auto' }}>
       <div className="tag mono fade-element">Key Players</div>
       <h2 className="fade-element">Competing interests</h2>
       <div className="accent-line fade-element"></div>

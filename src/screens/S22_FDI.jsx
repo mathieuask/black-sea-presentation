@@ -1,6 +1,6 @@
 export default function S22_FDI({ isDark }) {
   return (
-    <div style={{ maxWidth: '650px', marginRight: 'auto', marginLeft: '60px', background: 'rgba(8,8,10,0.65)', borderRadius: '16px', backdropFilter: 'blur(12px)', padding: '48px' }}>
+    <div style={{ maxWidth: '650px', marginRight: 'auto' }}>
       <div className="tag mono fade-element" style={{ borderColor: 'var(--green)', color: 'var(--green)' }}>FDI &amp; Nearshoring</div>
       <h2 className="fade-element">Winners in the crisis</h2>
       <div className="accent-line fade-element" style={{ background: 'linear-gradient(90deg, var(--green), var(--teal))' }}></div>

@@ -11,10 +11,12 @@
   "dependencies": {
     "chart.js": "^4.4.7",
     "chartjs-plugin-annotation": "^3.1.0",
-    "cobe": "^0.6.5",
     "gsap": "^3.12.5",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "three": "^0.183.2",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",

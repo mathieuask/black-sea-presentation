@@ -5,7 +5,7 @@ export default function S25_Conclusion({ isDark }) {
     { title: 'Expropriation precedent', color: 'var(--accent)', desc: '$167B in losses \u2014 seizures at presidential discretion without legal criteria. This has permanently altered FDI risk calculus globally.' },
   ]
   return (
-    <div style={{ maxWidth: '650px', marginRight: 'auto', marginLeft: '60px', background: 'rgba(8,8,10,0.65)', borderRadius: '16px', backdropFilter: 'blur(12px)', padding: '48px' }}>
+    <div style={{ maxWidth: '650px', marginRight: 'auto' }}>
       <div className="tag mono" style={{ borderColor: 'var(--red)', color: 'var(--red)' }}>Conclusion</div>
       <h2>Compounding risk,<br/>not a single threat</h2>
       <div className="accent-line" style={{ background: 'linear-gradient(90deg, var(--red), var(--amber))' }}></div>

@@ -1,6 +1,6 @@
 export default function S27_ThankYou({ isDark }) {
   return (
-    <div className="closing-content" style={{ maxWidth: '600px', marginRight: 'auto', marginLeft: '60px' }}>
+    <div className="closing-content" style={{ maxWidth: '600px', marginRight: 'auto' }}>
       <div className="hero-marker fade-element" style={{ marginLeft: 'auto', marginRight: 'auto' }}></div>
       <h2 className="fade-element" style={{ fontSize: 'clamp(2.5em, 5vw, 3.8em)' }}>Thank you</h2>
       <h3 className="fade-element" style={{ color: 'var(--text-secondary)', fontFamily: "'Inter',sans-serif", fontWeight: 300, marginTop: 16 }}>

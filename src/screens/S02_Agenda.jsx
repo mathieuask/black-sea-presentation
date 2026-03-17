@@ -9,7 +9,7 @@ export default function S02_Agenda({ isDark }) {
     { num: 'VII', text: 'Conclusion', color: 'var(--red)', numColor: 'var(--red)' },
   ]
   return (
-    <div style={{ maxWidth: '440px', marginRight: 'auto', marginLeft: '60px' }}>
+    <div style={{ maxWidth: '440px', marginRight: 'auto' }}>
       <div className="tag mono fade-element">Roadmap</div>
       <h2 className="fade-element">Agenda</h2>
       <div className="accent-line fade-element"></div>

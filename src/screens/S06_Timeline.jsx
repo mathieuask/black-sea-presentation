@@ -20,7 +20,7 @@ export default function S06_Timeline({ isDark }) {
   )
 
   return (
-    <div style={{ maxWidth: '650px', marginRight: 'auto', marginLeft: '60px', background: 'rgba(8,8,10,0.65)', borderRadius: '16px', backdropFilter: 'blur(12px)', padding: '48px' }}>
+    <div style={{ maxWidth: '650px', marginRight: 'auto' }}>
       <div className="tag mono fade-element">Historical Escalation</div>
       <h2 className="fade-element">From tension to war</h2>
       <div className="accent-line fade-element"></div>

@@ -38,7 +38,7 @@ function animateHeaders(tl, section, baseDelay) {
 function getSectionType(section) {
   if (section.querySelector('.hero-content')) return 'hero'
   if (section.querySelector('.closing-content')) return 'thankyou'
-  if (section.querySelector('.section-divider-content')) return 'divider'
+  if (section.querySelector('.section-num')) return 'divider'
   if (section.querySelector('.quote-block')) return 'quote'
   if (section.querySelector('.loss-bar')) return 'lossBars'
   if (section.querySelector('.gauge-fill')) return 'gauges'
@@ -112,6 +112,8 @@ function animateIn(section, direction) {
   const dir = direction || 1
 
   tl.set(section, { opacity: 1, visibility: 'visible' })
+  // Reset all elements to clean state before animating in
+  gsap.set(elements, { opacity: 0, x: 0, y: 0, scale: 1, rotation: 0, clearProps: 'clipPath' })
 
   // --- HERO ---
   if (type === 'hero') {
@@ -135,13 +137,13 @@ function animateIn(section, direction) {
   // --- DIVIDER ---
   } else if (type === 'divider') {
     const sn = section.querySelector('.section-num')
-    const heading = section.querySelector('.section-divider-content h2')
+    const heading = section.querySelector('h2.divider-title')
     const al = section.querySelector('.accent-line')
-    const desc = section.querySelector('.section-divider-content p')
-    if (sn) tl.fromTo(sn, { opacity: 0, letterSpacing: '0.6em', scale: 1.3 }, { opacity: 1, letterSpacing: '0.12em', scale: 1, duration: 0.9, ease: 'power3.out' }, 0.1)
-    if (heading) tl.fromTo(heading, { opacity: 0, y: 50, clipPath: 'inset(100% 0 0 0)' }, { opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)', duration: 0.8, ease: 'power4.out' }, 0.3)
-    if (al) tl.fromTo(al, { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: 'power2.inOut' }, 0.6)
-    if (desc) tl.fromTo(desc, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.85)
+    const desc = section.querySelector('h2.divider-title ~ p')
+    if (sn) tl.fromTo(sn, { opacity: 0, letterSpacing: '0.4em' }, { opacity: 1, letterSpacing: '0.12em', duration: 0.6, ease: 'power3.out' }, 0.05)
+    if (heading) tl.fromTo(heading, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.15)
+    if (al) tl.fromTo(al, { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: 'power2.inOut' }, 0.3)
+    if (desc) tl.fromTo(desc, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 0.35)
 
   // --- QUOTE (typewriter) ---
   } else if (type === 'quote') {

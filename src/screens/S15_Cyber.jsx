@@ -5,7 +5,7 @@ export default function S15_Cyber({ isDark }) {
     { name: 'Merck', cost: '$870M', label: 'Production halted\nglobally', color: 'var(--red)' },
   ]
   return (
-    <div style={{ maxWidth: '650px', marginRight: 'auto', marginLeft: '60px', background: 'rgba(8,8,10,0.65)', borderRadius: '16px', backdropFilter: 'blur(12px)', padding: '48px' }}>
+    <div style={{ maxWidth: '650px', marginRight: 'auto' }}>
       <div className="tag mono fade-element" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>Risk 10 // Cyber Threats</div>
       <h2 className="fade-element">NotPetya: $10 billion<br/>in 45 minutes</h2>
       <div className="accent-line fade-element"></div>

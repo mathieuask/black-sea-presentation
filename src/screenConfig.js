@@ -44,7 +44,15 @@ export const screens = [
 
   // --- PART I: THE REGION ---
   { component: S03_PartIDivider,
-    globe: { lat: 42, lng: 34, zoom: 2.2, autoRotate: false },
+    globe: { lat: 44, lng: 38, zoom: 1.8, autoRotate: false, labels: [
+      { name: 'Russia', lat: 58, lng: 42, color: '#e8715a', offsetY: -50 },
+      { name: 'Ukraine', lat: 50, lng: 31, color: '#e8715a', offsetY: -40 },
+      { name: 'Romania', lat: 46, lng: 24, color: '#5b9bd5', offsetY: -32 },
+      { name: 'Bulgaria', lat: 43, lng: 24, color: '#5dae7c', offsetY: -28 },
+      { name: 'Turkey', lat: 39, lng: 33, color: '#e5a84b', offsetY: -38 },
+      { name: 'Georgia', lat: 42.3, lng: 44, color: '#5dae7c', offsetY: -30 },
+      { name: 'Black Sea', lat: 43, lng: 35, color: 'rgba(255,255,255,0.4)', offsetY: -22 },
+    ] },
     transition: 'dramatic' },
 
   // Key Stats — Black Sea overview

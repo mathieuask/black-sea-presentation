@@ -1,6 +1,6 @@
 export default function S05_Geography({ isDark }) {
   return (
-    <div style={{ maxWidth: '420px', marginRight: 'auto', marginLeft: '60px', background: 'rgba(8,8,10,0.65)', borderRadius: '16px', backdropFilter: 'blur(12px)', padding: '48px' }}>
+    <div style={{ maxWidth: '420px', marginRight: 'auto' }}>
       <div className="tag mono fade-element">Strategic Geography</div>
       <h2 className="fade-element">Six nations. One sea.<br/>One chokepoint.</h2>
       <div className="accent-line fade-element"></div>

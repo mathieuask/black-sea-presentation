@@ -1,6 +1,6 @@
 export default function S26_Sources({ isDark }) {
   return (
-    <div style={{ maxWidth: '650px', marginRight: 'auto', marginLeft: '60px', background: 'rgba(8,8,10,0.65)', borderRadius: '16px', backdropFilter: 'blur(12px)', padding: '48px' }}>
+    <div style={{ maxWidth: '650px', marginRight: 'auto' }}>
       <div className="tag mono">References</div>
       <h2>Key Sources</h2>
       <div className="accent-line"></div>

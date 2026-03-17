@@ -1,6 +1,6 @@
 export default function S01_Hero({ isDark }) {
   return (
-    <div className="hero-content" style={{ maxWidth: '600px', marginRight: 'auto', marginLeft: '60px' }}>
+    <div className="hero-content" style={{ maxWidth: '600px', marginRight: 'auto' }}>
       <div className="tag mono fade-element">NEOMA Business School &bull; Companies &amp; Geopolitical Risks</div>
       <div className="hero-marker fade-element"></div>
       <h1 className="fade-element">The <span className="highlight">Black Sea</span><br/>Competition</h1>
