@@ -29,7 +29,7 @@ export default function S19_Ratings({ isDark }) {
         </tbody>
       </table>
       <p className="fade-element" style={{ marginTop: 18, fontSize: '0.85em' }}>
-        Russia collapsed from investment grade (Baa3) to complete ratings withdrawal within <strong>10 days</strong> of the Feb 2022 invasion &mdash; historically unprecedented.
+        Russia collapsed from investment grade (Baa3) to complete ratings withdrawal within <strong>10 days</strong> of the Feb 2022 invasion, historically unprecedented.
       </p>
     </div>
   )

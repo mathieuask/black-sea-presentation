@@ -52,7 +52,7 @@ export default function S13_Energy({ isDark }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--amber)', fontSize: '1.2em' }}>&#9679;</span>
             <span style={{ color: 'var(--text-secondary)', fontSize: '0.95em', lineHeight: 1.6 }}>
-              If disrupted, gas prices could spike <strong style={{ color: 'var(--red)' }}>30&ndash;50%</strong> within days
+              If disrupted, gas prices could spike <strong style={{ color: 'var(--red)' }}>30-50%</strong> within days
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

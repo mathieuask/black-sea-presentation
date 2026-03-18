@@ -7,7 +7,7 @@ export default function S16_Quote({ isDark }) {
           &ldquo;A drone strike on TurkStream triggers an energy spike, which raises inflation, which pressures governments on sanctions, which reshapes compliance obligations.&rdquo;
         </div>
         <div className="quote-attribution fade-element">
-          &mdash; The compounding risk logic of the Black Sea
+          - The compounding risk logic of the Black Sea
         </div>
       </div>
     </div>

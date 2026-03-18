@@ -7,7 +7,7 @@ export default function S27_ThankYou({ isDark }) {
         Questions &amp; Discussion
       </h3>
       <p className="fade-element" style={{ marginTop: 48, fontSize: '0.8em', color: 'var(--text-muted)', fontFamily: "'JetBrains Mono',monospace" }}>
-        NEOMA Business School &nbsp;&bull;&nbsp; Companies &amp; Geopolitical Risks &nbsp;&bull;&nbsp; 2025&ndash;2026
+        NEOMA Business School &nbsp;&bull;&nbsp; Companies &amp; Geopolitical Risks &nbsp;&bull;&nbsp; 2025-2026
       </p>
     </div>
   )

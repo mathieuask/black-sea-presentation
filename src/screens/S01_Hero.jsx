@@ -8,7 +8,7 @@ export default function S01_Hero({ isDark }) {
         Implications and Risks for International Business
       </h3>
       <p className="fade-element" style={{ marginTop: 48, fontSize: '0.8em', color: 'var(--text-muted)', fontFamily: "'JetBrains Mono',monospace" }}>
-        Professor Yassine OMRI &nbsp;&bull;&nbsp; Academic Year 2025&ndash;2026
+        Professor Yassine OMRI &nbsp;&bull;&nbsp; Academic Year 2025-2026
       </p>
     </div>
   )

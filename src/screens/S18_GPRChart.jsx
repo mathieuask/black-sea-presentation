@@ -7,7 +7,7 @@ export default function S18_GPRChart({ isDark }) {
       <h2 className="fade-element">Geopolitical Risk Index</h2>
       <div className="accent-line fade-element"></div>
       <p className="fade-element" style={{ fontSize: '0.85em' }}>
-        Peaked at <strong style={{ color: 'var(--red)' }}>167.3</strong> in March 2022 &mdash; the highest reading in 50 years. A shock of this magnitude reduces world GDP by ~1.7%.
+        Peaked at <strong style={{ color: 'var(--red)' }}>167.3</strong> in March 2022, the highest reading in 50 years. A shock of this magnitude reduces world GDP by ~1.7%.
       </p>
       <div className="chart-wrap fade-element" style={{
         minHeight: '420px',

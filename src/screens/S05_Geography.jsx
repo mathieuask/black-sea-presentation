@@ -12,7 +12,7 @@ export default function S05_Geography({ isDark }) {
         On Feb 27, 2022, Turkey invoked Montreux&apos;s wartime provisions for the <strong>first time since WWII</strong>, freezing the military balance entirely.
       </p>
       <p className="fade-element" style={{ marginTop: 14 }}>
-        <strong style={{ color: 'var(--red)' }}>TurkStream</strong> is now Europe&apos;s sole Russian gas pipeline &mdash; operating at <strong>98%</strong> capacity.
+        <strong style={{ color: 'var(--red)' }}>TurkStream</strong> is now Europe&apos;s sole Russian gas pipeline, operating at <strong>98%</strong> capacity.
       </p>
     </div>
   )

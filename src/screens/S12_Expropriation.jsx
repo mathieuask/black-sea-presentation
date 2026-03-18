@@ -13,7 +13,7 @@ export default function S12_Expropriation({ isDark }) {
       <div className="accent-line fade-element" style={{ background: 'linear-gradient(90deg, var(--red), var(--amber))' }}></div>
 
       <p className="fade-element" style={{ fontSize: '1.05em', lineHeight: 1.7, color: 'var(--text-secondary)', marginTop: 16 }}>
-        Russia systematically seized foreign assets. No legal criteria &mdash; presidential discretion only.
+        Russia systematically seized foreign assets. No legal criteria, presidential discretion only.
       </p>
 
       {/* Key stat */}
@@ -37,7 +37,7 @@ export default function S12_Expropriation({ isDark }) {
           <div key={i} className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1em', fontWeight: 600, color: 'var(--amber)', minWidth: 72, textAlign: 'right' }}>{l.amount}</span>
             <span style={{ color: 'var(--text)', fontWeight: 600 }}>{l.company}</span>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.85em' }}>&mdash; {l.note}</span>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.85em' }}>- {l.note}</span>
           </div>
         ))}
       </div>

@@ -5,10 +5,10 @@ export default function S11_Wars({ isDark }) {
       <h2 className="fade-element">Ukraine&apos;s asymmetric<br/>naval victory</h2>
       <div className="accent-line fade-element" style={{ background: 'linear-gradient(90deg, var(--red), var(--amber))' }}></div>
       <p className="fade-element" style={{ marginTop: 16 }}>
-        <strong>29 of 80 Russian vessels destroyed</strong> by MAGURA V5 naval drones costing $50K&ndash;$250K each &mdash; against warships worth tens of millions.
+        <strong>29 of 80 Russian vessels destroyed</strong> by MAGURA V5 naval drones costing $50K-$250K each, against warships worth tens of millions.
       </p>
       <p className="fade-element" style={{ marginTop: 14 }}>
-        War risk insurance surged from <strong>0.025%</strong> to <strong>1.0&ndash;1.5%</strong> of vessel value &mdash; a <strong>40-fold increase</strong>, adding ~$1M per voyage for a $100M vessel.
+        War risk insurance surged from <strong>0.025%</strong> to <strong>1.0-1.5%</strong> of vessel value, a <strong>40-fold increase</strong>, adding ~$1M per voyage for a $100M vessel.
       </p>
       <div className="stat-grid cols-3" style={{ marginTop: 28 }}>
         <div className="stat-card card fade-element">

@@ -8,7 +8,7 @@ export default function S26_Sources({ isDark }) {
         <strong>Think Tanks</strong><br/>
         Chatham House (2024, 2025) &bull; Atlantic Council (2024, 2025) &bull; RUSI (2025) &bull; German Marshall Fund (2025) &bull; CEPA (2025) &bull; NATO PA (2025) &bull; Marshall Center (2024) &bull; College of Europe (2025)<br/><br/>
         <strong>Official Sources</strong><br/>
-        European Commission Black Sea Strategy (May 2025) &bull; EU Consilium Sanctions (2024&ndash;2026) &bull; NATO Strategic Concept (2022) &bull; UN Black Sea Grain Initiative (2022&ndash;23) &bull; UNHCR (2024)<br/><br/>
+        European Commission Black Sea Strategy (May 2025) &bull; EU Consilium Sanctions (2024-2026) &bull; NATO Strategic Concept (2022) &bull; UN Black Sea Grain Initiative (2022-23) &bull; UNHCR (2024)<br/><br/>
         <strong>Legal</strong><br/>
         Montreux Convention (1936) &bull; BISI (2025) &bull; US Naval Institute (2022) &bull; West Point Lieber Institute (2024)<br/><br/>
         <strong>Energy</strong><br/>
