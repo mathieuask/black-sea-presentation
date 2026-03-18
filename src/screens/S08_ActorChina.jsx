@@ -14,15 +14,15 @@ export default function S08_ActorChina({ isDark }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 24 }}>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--green)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>$600M Anaklia deep-water port in Georgia</span>
+            <span style={{ color: 'var(--text-secondary)' }}>$600M Anaklia deep-water port, China's Black Sea gateway via Georgia</span>
           </div>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--green)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>Middle Corridor bypassing Russia</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Middle Corridor trade route bypassing Russian territory entirely</span>
           </div>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--green)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>Strategic port investments across the region</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Belt & Road infrastructure expanding into NATO's southeastern flank</span>
           </div>
         </div>
       </div>

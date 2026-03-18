@@ -14,15 +14,15 @@ export default function S08_ActorEU({ isDark }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 24 }}>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--teal)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>19 sanctions packages adopted</span>
+            <span style={{ color: 'var(--text-secondary)' }}>19 sanctions packages, most complex regime in history</span>
           </div>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--teal)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>{'\u20AC'}210B in frozen Russian assets</span>
+            <span style={{ color: 'var(--text-secondary)' }}>{'\u20AC'}210B in Russian central bank assets frozen</span>
           </div>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--teal)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>Energy diversification away from Russian gas</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Shifting energy supply away from Russian gas</span>
           </div>
         </div>
       </div>

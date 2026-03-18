@@ -14,15 +14,15 @@ export default function S08_ActorNATO({ isDark }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 24 }}>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--accent)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>Trilateral Mine Counter-Measures Task Force</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Romania-Turkey-Bulgaria joint naval task force (Jan 2024)</span>
           </div>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--accent)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>US base expansion at Mihail Kog&#259;lniceanu, Romania</span>
+            <span style={{ color: 'var(--text-secondary)' }}>US military base expanding in Romania (multi-billion $)</span>
           </div>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--accent)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>Finland & Sweden accession strengthens posture</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Finland & Sweden joining NATO strengthens eastern defense</span>
           </div>
         </div>
       </div>

@@ -14,15 +14,15 @@ export default function S08_ActorRussia({ isDark }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 24 }}>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--red)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>TurkStream pipeline as geopolitical leverage</span>
+            <span style={{ color: 'var(--text-secondary)' }}>TurkStream pipeline as economic weapon</span>
           </div>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--red)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>Grain export blockade strategy (2022–2023)</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Grain blockade used as food weapon (2022-2023)</span>
           </div>
           <div className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ color: 'var(--red)', fontSize: '1.2em' }}>&#9679;</span>
-            <span style={{ color: 'var(--text-secondary)' }}>Control over Crimea & Sea of Azov</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Control over Crimea & Sea of Azov for power projection</span>
           </div>
         </div>
       </div>
