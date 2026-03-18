@@ -1,7 +1,7 @@
 export default function S08_ActorChina({ isDark }) {
   return (
     <div style={{ maxWidth: '500px', marginRight: 'auto' }}>
-      <div className="tag mono fade-element">Key Players — 5/5</div>
+      <div className="tag mono fade-element">Key Players, 5/5</div>
       <h2 className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <span style={{ fontSize: '0.8em' }}>{'\u{1F1E8}\u{1F1F3}'}</span> China
       </h2>

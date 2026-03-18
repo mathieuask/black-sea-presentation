@@ -10,7 +10,7 @@ export default function S14_Food({ isDark }) {
         lineHeight: 1.7, color: 'var(--text)'
       }}>
         <li style={{ paddingLeft: 8 }}>
-          Russia and Ukraine supply <strong>34% of global wheat exports</strong> — the 2022 blockade trapped 25M tonnes in Ukrainian ports
+          Russia and Ukraine supply <strong>34% of global wheat exports</strong>. The 2022 blockade trapped 25M tonnes in Ukrainian ports
         </li>
         <li style={{ paddingLeft: 8 }}>
           Wheat prices surged <strong style={{ fontFamily: 'var(--font-mono)', color: 'var(--coral, #E8715A)' }}>+58%</strong> in March 2022; FAO Food Price Index hit its all-time high

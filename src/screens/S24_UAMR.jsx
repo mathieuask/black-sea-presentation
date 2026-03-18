@@ -3,7 +3,7 @@ export default function S24_UAMR({ isDark }) {
     { num: '01', title: 'Understand', color: 'var(--accent)', desc: 'Define risk appetite across all 10 GPR types. Map each country: Romania/Bulgaria = stable, Turkey = volatile, Ukraine = high risk.' },
     { num: '02', title: 'Analyse', color: 'var(--teal)', desc: 'Combine GPR Index, insurance data and TurkStream flows. Use scenario planning with think-tank intelligence.' },
     { num: '03', title: 'Mitigate', color: 'var(--amber)', desc: 'Diversify supply chains via Constanta/Danube alternatives. Obtain MIGA insurance. Build surge capacity for rerouting.' },
-    { num: '04', title: 'Respond', color: 'var(--red)', desc: 'Plan for failure — activate crisis teams immediately. Capitalize on near misses. Train continuously.' },
+    { num: '04', title: 'Respond', color: 'var(--red)', desc: 'Plan for failure, activate crisis teams immediately. Capitalize on near misses. Train continuously.' },
   ]
 
   return (

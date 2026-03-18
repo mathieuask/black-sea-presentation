@@ -1,7 +1,7 @@
 export default function S08_ActorEU({ isDark }) {
   return (
     <div style={{ maxWidth: '500px', marginRight: 'auto' }}>
-      <div className="tag mono fade-element">Key Players — 3/5</div>
+      <div className="tag mono fade-element">Key Players, 3/5</div>
       <h2 className="fade-element" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <span style={{ fontSize: '0.8em' }}>{'\u{1F1EA}\u{1F1FA}'}</span> European Union
       </h2>

@@ -1,7 +1,7 @@
 export default function S08_ActorTurkey({ isDark }) {
   return (
     <div style={{ maxWidth: "500px", marginRight: "auto" }}>
-      <div className="tag mono fade-element">Key Players — 4/5</div>
+      <div className="tag mono fade-element">Key Players, 4/5</div>
       <h2
         className="fade-element"
         style={{ display: "flex", alignItems: "center", gap: 16 }}

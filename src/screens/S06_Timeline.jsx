@@ -32,4 +32,4 @@ export function createTimelineEvent(year, text, isCritical = false) {
 }
 
 // Keep default export for backwards compatibility
-export default createTimelineEvent('—', '...')
+export default createTimelineEvent('-', '...')
